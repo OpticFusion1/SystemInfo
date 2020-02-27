@@ -10,7 +10,7 @@ public final class CommandSensors implements Command { ;
 
     @Override
     public void action(CommandSender sender, String name, String[] args) {
-        if (name.equals("sensors")) {
+        if (name.equals("cputemp")) {
             if (sender.hasPermission("systeminfo.commands.sensors")) {
                 if (args.length == 0) {
                     sender.sendMessage(Utils.color(String.format("&7Fans RPM: &a%s", SystemValues.getFansRPM())));
