@@ -1,12 +1,13 @@
 package me.thevipershow.systeminfo.commands;
 
 import me.thevipershow.systeminfo.enums.Messages;
-import me.thevipershow.systeminfo.interfaces.Command;
 import me.thevipershow.systeminfo.oshi.SystemValues;
 import me.thevipershow.systeminfo.utils.Utils;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public final class CommandVmstat implements Command {
+public final class CommandVmstat implements CommandExecutor {
 
     private void vmstat(CommandSender sender) {
         sender.sendMessage(Utils.color("&2«« &7Memory info &2»»"));
@@ -18,17 +19,17 @@ public final class CommandVmstat implements Command {
     }
 
     @Override
-    public void action(CommandSender sender, String name, String[] args) {
-        if (name.equals("vmstat")) {
-            if (args.length == 0) {
-                if (sender.hasPermission("systeminfo.commands.vmstat")) {
-                    vmstat(sender);
-                } else {
-                    sender.sendMessage(Messages.NO_PERMISSIONS.value(true));
-                }
-            } else {
-                sender.sendMessage(Messages.OUT_OF_ARGS.value(true));
-            }
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (args.length != 0) {
+            sender.sendMessage(Messages.OUT_OF_ARGS.value(true));
+            return true;
         }
+        if (!sender.hasPermission("systeminfo.commands.vmstat")) {
+            sender.sendMessage(Messages.NO_PERMISSIONS.value(true));
+            return true;
+        }
+        vmstat(sender);
+        return true;
     }
+
 }

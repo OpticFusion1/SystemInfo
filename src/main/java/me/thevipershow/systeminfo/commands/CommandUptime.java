@@ -2,14 +2,15 @@ package me.thevipershow.systeminfo.commands;
 
 import me.thevipershow.systeminfo.SystemInfo;
 import me.thevipershow.systeminfo.enums.Messages;
-import me.thevipershow.systeminfo.interfaces.Command;
 import me.thevipershow.systeminfo.utils.Utils;
 import org.bukkit.command.CommandSender;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 
-public final class CommandUptime implements Command {
+public final class CommandUptime implements CommandExecutor {
 
     private void uptime(CommandSender sender) {
         final long uptime = ChronoUnit.MINUTES.between(SystemInfo.time, LocalDateTime.now());
@@ -18,17 +19,17 @@ public final class CommandUptime implements Command {
     }
 
     @Override
-    public void action(CommandSender sender, String name, String[] args) {
-        if (name.equals("uptime")) {
-            if (args.length == 0) {
-                if (sender.hasPermission("systeminfo.commands.uptime")) {
-                    uptime(sender);
-                } else {
-                    sender.sendMessage(Messages.NO_PERMISSIONS.value(true));
-                }
-            } else {
-                sender.sendMessage(Messages.OUT_OF_ARGS.value(true));
-            }
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (args.length != 0) {
+            sender.sendMessage(Messages.OUT_OF_ARGS.value(true));
+            return true;
         }
+        if (!sender.hasPermission("systeminfo.commands.uptime")) {
+            sender.sendMessage(Messages.NO_PERMISSIONS.value(true));
+            return true;
+        }
+        uptime(sender);
+        return true;
     }
+
 }

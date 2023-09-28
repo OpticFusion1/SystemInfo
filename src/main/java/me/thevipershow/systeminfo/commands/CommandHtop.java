@@ -1,7 +1,6 @@
 package me.thevipershow.systeminfo.commands;
 
 import me.thevipershow.systeminfo.enums.Messages;
-import me.thevipershow.systeminfo.interfaces.Command;
 import me.thevipershow.systeminfo.oshi.SystemValues;
 import me.thevipershow.systeminfo.utils.Utils;
 import org.bukkit.command.CommandSender;
@@ -10,8 +9,10 @@ import oshi.software.os.OperatingSystem;
 
 import java.util.Arrays;
 import java.util.List;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 
-public final class CommandHtop implements Command {
+public final class CommandHtop implements CommandExecutor {
 
     private void printHtop(CommandSender sender) {
         sender.sendMessage(Utils.color("&2« &7Htop &2»"));
@@ -31,17 +32,13 @@ public final class CommandHtop implements Command {
     }
 
     @Override
-    public void action(CommandSender sender, String name, String[] args) {
-        if (name.equals("htop")) {
-            if (sender.hasPermission("systeminfo.commands.htop")) {
-                if (args.length == 0) {
-                    printHtop(sender);
-                } else {
-                    sender.sendMessage(Messages.OUT_OF_ARGS.value(true));
-                }
-            } else {
-                sender.sendMessage(Messages.NO_PERMISSIONS.value(true));
-            }
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (!sender.hasPermission("systeminfo.commands.htop")) {
+            sender.sendMessage(Messages.NO_PERMISSIONS.value(true));
+            return true;
         }
+        printHtop(sender);
+        return true;
     }
+
 }

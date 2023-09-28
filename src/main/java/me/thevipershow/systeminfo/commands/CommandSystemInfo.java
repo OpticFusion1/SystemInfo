@@ -3,13 +3,14 @@ package me.thevipershow.systeminfo.commands;
 import me.thevipershow.systeminfo.SystemInfo;
 import me.thevipershow.systeminfo.enums.Messages;
 import me.thevipershow.systeminfo.gui.SystemInfoGui;
-import me.thevipershow.systeminfo.interfaces.Command;
 import me.thevipershow.systeminfo.utils.Utils;
 import org.bukkit.World;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public final class CommandSystemInfo implements Command {
+public final class CommandSystemInfo implements CommandExecutor {
 
     private void systemInfo1(CommandSender sender) {
         sender.sendMessage(Utils.color("&7&m&l--------------------------------------"));
@@ -40,27 +41,35 @@ public final class CommandSystemInfo implements Command {
     }
 
     @Override
-    public void action(CommandSender sender, String name, String[] args) {
-        if (name.equals("systeminfo")) {
-            if (sender.hasPermission("systeminfo.command.help")) {
-                if (args.length == 0) {
-                    systemInfo1(sender);
-                } else if (args.length == 1 && args[0].equals("2")) {
-                    systemInfo2(sender);
-                } else if (args.length == 1 && args[0].equals("version")) {
-                    sender.sendMessage(String.format(Utils.color("&2» &7SystemInfo version: &a%s"), SystemInfo.instance.getDescription().getVersion()));
-                } else if (args.length == 1 && args[0].equals("stats")) {
-                    stats(sender);
-                } else if (args.length == 1 && args[0].equals("gui")) {
-                    if (sender instanceof Player) {
-                        new SystemInfoGui(((Player) sender));
-                    }
-                } else {
-                    sender.sendMessage(Messages.INVALID_ARGS.value(true));
-                }
-            } else {
-                sender.sendMessage(Messages.NO_PERMISSIONS.value(true));
-            }
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (!sender.hasPermission("systeminfo.command.help")) {
+            sender.sendMessage(Messages.NO_PERMISSIONS.value(true));
+            return true;
         }
+        if (args.length == 0) {
+            systemInfo1(sender);
+            return true;
+        }
+        if (args[0].equals("2")) {
+            systemInfo2(sender);
+            return true;
+        }
+        if (args[0].equals("version")) {
+            sender.sendMessage(String.format(Utils.color("&2» &7SystemInfo version: &a%s"), SystemInfo.instance.getDescription().getVersion()));
+            return true;
+        }
+        if (args[0].equals("stats")) {
+            stats(sender);
+            return true;
+        }
+        if (args[0].equals("gui")) {
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage("You must be a player to run this command");
+                return true;
+            }
+            new SystemInfoGui(player);
+        }
+        return true;
     }
+
 }

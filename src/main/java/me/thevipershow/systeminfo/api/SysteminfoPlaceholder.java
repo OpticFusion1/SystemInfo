@@ -26,35 +26,17 @@ public class SysteminfoPlaceholder extends PlaceholderExpansion {
     public String onRequest(OfflinePlayer p, String params) {
         StringBuilder toReturnString = new StringBuilder();
         switch (params) {
-            case "cpu-model":
-                toReturnString.append(String.format("%s %s", SystemValues.getCpuModel(), SystemValues.getCpuModelName()));
-                break;
-            case "cpu-frequency":
-                toReturnString.append(SystemValues.getCpuMaxFrequency());
-                break;
-            case "cpu-temperature":
-                toReturnString.append(SystemValues.getCpuTemperature());
-                break;
-            case "swap-max":
-                toReturnString.append(SystemValues.getTotalSwap());
-                break;
-            case "swap-used":
-                toReturnString.append(SystemValues.getUsedSwap());
-                break;
-            case "memory-max":
-                toReturnString.append(SystemValues.getMaxMemory());
-                break;
-            case "memory-available":
-                toReturnString.append(SystemValues.getAvailableMemory());
-                break;
-            case "memory-used":
-                toReturnString.append(SystemValues.getUsedMemory());
-                break;
-            case "processes":
-                toReturnString.append(SystemValues.getRunningProcesses());
-                break;
-            default:
-                break;
+            case "cpu-model" -> toReturnString.append(String.format("%s %s", SystemValues.getCpuModel(), SystemValues.getCpuModelName()));
+            case "cpu-frequency" -> toReturnString.append(SystemValues.getCpuMaxFrequency());
+            case "cpu-temperature" -> toReturnString.append(SystemValues.getCpuTemperature());
+            case "swap-max" -> toReturnString.append(SystemValues.getTotalSwap());
+            case "swap-used" -> toReturnString.append(SystemValues.getUsedSwap());
+            case "memory-max" -> toReturnString.append(SystemValues.getMaxMemory());
+            case "memory-available" -> toReturnString.append(SystemValues.getAvailableMemory());
+            case "memory-used" -> toReturnString.append(SystemValues.getUsedMemory());
+            case "processes" -> toReturnString.append(SystemValues.getRunningProcesses());
+            default -> {
+            }
         }
         return toReturnString.toString();
     }

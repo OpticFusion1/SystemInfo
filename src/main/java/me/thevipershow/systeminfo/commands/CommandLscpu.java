@@ -1,12 +1,13 @@
 package me.thevipershow.systeminfo.commands;
 
 import me.thevipershow.systeminfo.enums.Messages;
-import me.thevipershow.systeminfo.interfaces.Command;
 import me.thevipershow.systeminfo.oshi.SystemValues;
 import me.thevipershow.systeminfo.utils.Utils;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public final class CommandLscpu implements Command {
+public final class CommandLscpu implements CommandExecutor {
 
     private void printLscpu(CommandSender sender) {
         sender.sendMessage(Utils.color("&2«« &7Cpu info &2»»"));
@@ -19,17 +20,13 @@ public final class CommandLscpu implements Command {
     }
 
     @Override
-    public void action(CommandSender sender, String name, String[] args) {
-        if (name.equals("lscpu")) {
-            if (sender.hasPermission("systeminfo.commands.lscpu")) {
-                if (args.length == 0) {
-                    printLscpu(sender);
-                } else {
-                    sender.sendMessage(Messages.OUT_OF_ARGS.value(true));
-                }
-            } else {
-                sender.sendMessage(Messages.NO_PERMISSIONS.value(true));
-            }
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (!sender.hasPermission("systeminfo.commands.lscpu")) {
+            sender.sendMessage(Messages.NO_PERMISSIONS.value(true));
+            return true;
         }
+        printLscpu(sender);
+        return true;
     }
+
 }

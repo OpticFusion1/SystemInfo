@@ -2,6 +2,7 @@ package me.thevipershow.systeminfo.enums;
 
 import me.thevipershow.systeminfo.utils.Utils;
 
+// TODO: Make this an I18N class
 public enum Messages {
 
     INVALID_ARGS("&4» &cInvalid arguments."),

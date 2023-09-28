@@ -1,13 +1,14 @@
 package me.thevipershow.systeminfo.commands;
 
 import me.thevipershow.systeminfo.enums.Messages;
-import me.thevipershow.systeminfo.interfaces.Command;
 import me.thevipershow.systeminfo.oshi.SystemValues;
 import me.thevipershow.systeminfo.utils.Utils;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import oshi.util.Util;
 
-public final class CommandCpuLoad implements Command {
+public final class CommandCpuLoad implements CommandExecutor {
 
     private long[] previousTicks;
     private long[][] previousMultiTicks;
@@ -35,17 +36,12 @@ public final class CommandCpuLoad implements Command {
     }
 
     @Override
-    public void action(CommandSender sender, String name, String[] args) {
-        if (name.equals("cpuload")) {
-            if (args.length == 0) {
-                if (sender.hasPermission("systeminfo.commands.cpuload")) {
-                    printCpuLoad(sender);
-                } else {
-                    sender.sendMessage(Messages.NO_PERMISSIONS.value(true));
-                }
-            } else {
-                sender.sendMessage(Messages.OUT_OF_ARGS.value(true));
-            }
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (!sender.hasPermission("systeminfo.commands.cpuload")) {
+            sender.sendMessage(Messages.OUT_OF_ARGS.value(true));
+            return true;
         }
+        return true;
     }
+
 }
