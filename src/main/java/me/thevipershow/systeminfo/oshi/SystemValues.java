@@ -113,7 +113,8 @@ public final class SystemValues {
      * @return Get the current operating system family name.
      */
     public static String getOSFamily() {
-        return OPERATING_SYSTEM.getFamily();
+        return System.getProperty("os.name");
+//        return OPERATING_SYSTEM.getFamily();
     }
 
     /**
@@ -127,7 +128,8 @@ public final class SystemValues {
      * @return Get the current operating system version name.
      */
     public static String getOSVersion() {
-        return OS_VERSION_INFO.getVersion();
+        return System.getProperty("os.version");
+//        return OS_VERSION_INFO.getVersion();
     }
 
     /**

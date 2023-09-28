@@ -3,7 +3,7 @@
 
     <groupId>me.thevipershow</groupId>
     <artifactId>SystemInfo</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
     <packaging>jar</packaging>
 
     <build>
@@ -40,7 +40,7 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.4.1</version>
                 <configuration>
-                    <finalName>Aurora</finalName>
+                    <finalName>SystemInfo</finalName>
                     <filters>
                         <filter>
                             <artifact>*:*</artifact>
