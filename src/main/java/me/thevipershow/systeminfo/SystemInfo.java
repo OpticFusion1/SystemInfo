@@ -3,11 +3,10 @@ package me.thevipershow.systeminfo;
 import me.thevipershow.systeminfo.api.SysteminfoPlaceholder;
 import me.thevipershow.systeminfo.gui.GuiClickListener;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.time.LocalDateTime;
-import java.util.logging.Logger;
+import java.util.Locale;
 import me.thevipershow.systeminfo.commands.CommandCpuLoad;
 import me.thevipershow.systeminfo.commands.CommandDevices;
 import me.thevipershow.systeminfo.commands.CommandDisks;
@@ -17,26 +16,26 @@ import me.thevipershow.systeminfo.commands.CommandSensors;
 import me.thevipershow.systeminfo.commands.CommandSystemInfo;
 import me.thevipershow.systeminfo.commands.CommandUptime;
 import me.thevipershow.systeminfo.commands.CommandVmstat;
+import me.thevipershow.systeminfo.utils.I18n;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.plugin.PluginManager;
 
 public final class SystemInfo extends JavaPlugin {
 
-    private static final PluginManager PLUGIN_MANAGER = Bukkit.getPluginManager();
+    public static final LocalDateTime STARTUP_TIME = LocalDateTime.now();
+    public static I18n I18N;
     public static final String PLUGIN_VERSION = "2";
-    public static Plugin instance;
-    public static LocalDateTime time;
-    public static Logger logger;
 
     @Override
     public void onEnable() {
-        instance = this;
-        logger = instance.getLogger();
-        time = LocalDateTime.now();
-        Bukkit.getPluginManager().registerEvents(new GuiClickListener(), instance);
+        saveResource("messages_en.properties", false);
+        
+        
+        I18N = new I18n(this);
+        I18N.updateLocale(Locale.getDefault().getLanguage());
+        Bukkit.getPluginManager().registerEvents(new GuiClickListener(), this);
 
-        registerCommand("systeminfo", new CommandSystemInfo());
+        registerCommand("systeminfo", new CommandSystemInfo(this));
         registerCommand("vmstat", new CommandVmstat());
         registerCommand("uptime", new CommandUptime());
         registerCommand("lscpu", new CommandLscpu());
@@ -47,7 +46,7 @@ public final class SystemInfo extends JavaPlugin {
         registerCommand("sensors", new CommandSensors());
         
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
-            logger.info("Could not find PlaceholderAPI, placeholders won't be available.");
+            getLogger().info("Could not find PlaceholderAPI, placeholders won't be available.");
             return;
         }
 

@@ -1,8 +1,8 @@
 package me.thevipershow.systeminfo.commands;
 
 import me.thevipershow.systeminfo.SystemInfo;
-import me.thevipershow.systeminfo.enums.Messages;
 import me.thevipershow.systeminfo.gui.SystemInfoGui;
+import static me.thevipershow.systeminfo.utils.I18n.tl;
 import me.thevipershow.systeminfo.utils.Utils;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -11,6 +11,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public final class CommandSystemInfo implements CommandExecutor {
+
+    private SystemInfo systemInfo;
+
+    public CommandSystemInfo(SystemInfo systemInfo) {
+        this.systemInfo = systemInfo;
+    }
 
     private void systemInfo1(CommandSender sender) {
         sender.sendMessage(Utils.color("&7&m&l--------------------------------------"));
@@ -43,7 +49,7 @@ public final class CommandSystemInfo implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!sender.hasPermission("systeminfo.command.help")) {
-            sender.sendMessage(Messages.NO_PERMISSIONS.value(true));
+            sender.sendMessage(tl("no-perms"));
             return true;
         }
         if (args.length == 0) {
@@ -55,7 +61,7 @@ public final class CommandSystemInfo implements CommandExecutor {
             return true;
         }
         if (args[0].equals("version")) {
-            sender.sendMessage(String.format(Utils.color("&2» &7SystemInfo version: &a%s"), SystemInfo.instance.getDescription().getVersion()));
+            sender.sendMessage(String.format(Utils.color("&2» &7SystemInfo version: &a%s"), systemInfo.getDescription().getVersion()));
             return true;
         }
         if (args[0].equals("stats")) {
@@ -67,7 +73,7 @@ public final class CommandSystemInfo implements CommandExecutor {
                 sender.sendMessage("You must be a player to run this command");
                 return true;
             }
-            new SystemInfoGui(player);
+            new SystemInfoGui(systemInfo, player);
         }
         return true;
     }

@@ -1,6 +1,5 @@
 package me.thevipershow.systeminfo.commands;
 
-import me.thevipershow.systeminfo.enums.Messages;
 import me.thevipershow.systeminfo.oshi.SystemValues;
 import me.thevipershow.systeminfo.utils.Utils;
 import org.bukkit.command.CommandSender;
@@ -9,6 +8,7 @@ import oshi.software.os.OperatingSystem;
 
 import java.util.Arrays;
 import java.util.List;
+import static me.thevipershow.systeminfo.utils.I18n.tl;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 
@@ -34,7 +34,7 @@ public final class CommandHtop implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!sender.hasPermission("systeminfo.commands.htop")) {
-            sender.sendMessage(Messages.NO_PERMISSIONS.value(true));
+            sender.sendMessage(tl("no-perms"));
             return true;
         }
         printHtop(sender);

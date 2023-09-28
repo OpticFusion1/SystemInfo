@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import static me.thevipershow.systeminfo.SystemInfo.STARTUP_TIME;
 
 public final class SystemInfoGui {
     //TODO: Remove stupid instantiation and make methods static.
@@ -21,19 +22,21 @@ public final class SystemInfoGui {
     private Player player;
     private Inventory inventory;
     private final Set<Integer> backgroundSlots = new LinkedHashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 18, 27, 26, 25, 24, 23, 22, 21, 20, 19, 10));
-
+    private SystemInfo plugin;
+    
     /**
      * This is the constructor and is used to open a new GUI to a player
      * by instantiating the class.
      *
      * @param player this is the target player that will receive the GUI Inventory.
      */
-    public SystemInfoGui(Player player) {
+    public SystemInfoGui(SystemInfo plugin, Player player) {
+        this.plugin = plugin;
         this.player = player;
         this.inventory = Bukkit.createInventory(player, 27, "SystemInfo");
         player.openInventory(this.inventory);
         fillBackground(this.inventory, this.backgroundSlots);
-        Bukkit.getScheduler().runTaskTimer(SystemInfo.instance, r -> {
+        Bukkit.getScheduler().runTaskTimer(plugin, r -> {
             if (player.getOpenInventory().getTitle().equals("SystemInfo")) {
                 updateInventory(inventory);
             } else {
@@ -50,7 +53,7 @@ public final class SystemInfoGui {
      */
     private void fillBackground(Inventory inventory, Set<Integer> backgroundSlots) {
         Iterator<Integer> invSlot = backgroundSlots.iterator();
-        Bukkit.getScheduler().runTaskTimer(SystemInfo.instance, r -> {
+        Bukkit.getScheduler().runTaskTimer(plugin, r -> {
             if (invSlot.hasNext()) {
                 createCustomItem(inventory, Material.BLACK_STAINED_GLASS_PANE, 1, invSlot.next(), " ", " ");
             } else {
@@ -111,7 +114,7 @@ public final class SystemInfoGui {
                 String.format("&7Processes: &a%d", SystemValues.getRunningProcesses()));
 
         createCustomItem(inventory, Material.BLUE_CONCRETE, 1, 17, "&2Uptime",
-                String.format("&7Jvm uptime: &a%d min", ChronoUnit.MINUTES.between(SystemInfo.time, LocalDateTime.now())),
+                String.format("&7Jvm uptime: &a%d min", ChronoUnit.MINUTES.between(STARTUP_TIME, LocalDateTime.now())),
                 String.format("&7Current time: &a%s", LocalDateTime.now().format(DateTimeFormatter.ofPattern("d\\M\\u h:m:s a"))));
     }
 
